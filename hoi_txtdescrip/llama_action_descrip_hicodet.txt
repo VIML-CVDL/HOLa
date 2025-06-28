@@ -1,0 +1,1081 @@
+
+0
+For the action "a person is adjusting the object", common visual features shared by the objects (skis, snowboard, tie) include:
+
+* Person's hands manipulating the object
+* Object being adjusted or fine-tuned
+* Close-up or mid-range shot focusing on the person's hands and the object
+* Possibly a background or context related to the object's use (e.g. snow, mountain for skis/snowboard)
+
+1
+For the action "a person is assembling the object", common visual features include:
+
+* A person's hands holding or manipulating the object
+* The object in various stages of assembly (e.g., parts, pieces, or components)
+* A flat surface or work area for assembly
+* Tools or materials nearby (e.g., glue, tape, or strings)
+* A focus on the person's hands and the object being assembled
+
+2
+For the action "a person is blocking the object", common visual features include:
+
+* A person's body part (hand, arm, or body) obstructing the object's trajectory
+* The object (frisbee, sports ball) partially or fully hidden from view
+* The person's body language indicating obstruction (e.g., arm outstretched, hand raised)
+* A sense of movement or tension in the scene, implying the person is actively blocking the object.
+
+3
+For the action "a person is blowing the object", common visual features include:
+
+* A person's face with open mouth and visible breath
+* A puff of air or mist surrounding the object
+* The object being lifted or moved by the airflow
+* A sense of movement or disturbance around the object
+
+Note: These features are general and may vary depending on the specific object, lighting, and context.
+
+4
+For the action "a person is boarding the object", common visual features include:
+
+* A person (typically standing or walking) approaching the object
+* The object's door or entrance opening or being pushed open
+* The person's body or luggage entering the object
+* A sense of movement or transition from outside to inside the object
+
+These features are applicable to airplanes, boats, buses, cars, and trains.
+
+5
+For the action "a person is breaking an object", common visual features include:
+
+* Fragmentation or destruction of the object (e.g. baseball bat)
+* Person's hands or arms in contact with the object
+* Object's shape or form altered or distorted
+* Possible debris or pieces scattered around the scene
+* Expression of effort or force on the person's face
+
+6
+The visual features for the action "a person is brushing with an object" typically include:
+
+* A person holding an object (e.g., toothbrush) with their hand
+* The object in motion, with bristles or fingers moving towards the person's mouth or teeth
+* A gentle or sweeping motion, with the object gliding across the surface
+* The person's face or mouth in view, with a slight smile or relaxed expression
+* A clean or dental hygiene-related context, such as a bathroom or sink
+
+7
+For the action "a person is buying the object", common visual features include:
+
+* A person holding the object
+* A hand or hands grasping the object
+* A clear view of the object being purchased
+* A background with a store or market setting
+* The person facing the camera or a slight angle
+* A focus on the transaction or payment process
+
+8
+The common visual features for the action "a person is carrying the object" include:
+
+* A person's hand or hands grasping or holding the object
+* The object being lifted or supported by the person's body
+* The object being transported or moved by the person
+* A sense of movement or action between the person and the object
+
+These features are shared across various objects, including bicycles, backpacks, books, and more.
+
+9
+The visual features for the action "a person catching an object" typically include:
+
+* A person's hand or arms extending to receive the object
+* The object (frisbee or sports ball) in mid-air, about to be caught
+* The person's body positioned to receive the object, with their hand or arms in a catching stance
+* The object and person in a dynamic pose, with the object's trajectory intersecting with the person's catching motion.
+
+Common visual features shared by both objects include the person's outstretched hand, the object's trajectory, and the dynamic pose of the person and object.
+
+10
+For the action "a person is chasing an object", common visual features include:
+
+* The person is in a dynamic pose, with legs bent and arms extended
+* The object (bird, cat, or dog) is in a fleeing pose, with legs/feathers moving rapidly
+* The person's facial expression is determined, with a focused or concerned look
+* The background is often blurred, with a sense of motion and energy.
+
+11
+For the action "a person is checking the object", common visual features include:
+
+* A person's hand or arm interacting with the object
+* The object is in a state of being examined or inspected
+* The person's face may be focused or concentrated on the object
+* The object is likely to be stationary, with the person moving towards or away from it
+
+These features are shared across objects like clocks and parking meters.
+
+12
+Common visual features for "a person cleaning an object" include:
+
+* Person holding a cleaning tool (e.g., cloth, brush, spray bottle)
+* Object being cleaned (e.g., dining table, bed, keyboard)
+* Cleaning motion (e.g., wiping, scrubbing, dusting)
+* Possible presence of dirt, dust, or stains on the object
+* Person's hands and arms in a cleaning position
+
+13
+Common visual features for "a person controlling an object" action:
+
+* Person's hand grasping or holding the object
+* Object's surface reflecting the person's fingers or palm
+* Person's fingers or hand moving to control the object's movement or function
+* Object's buttons, controls, or interfaces visible and being interacted with
+* Person's focus and attention directed towards the object
+
+14
+The visual features for the action "a person is cooking the object" include:
+
+* A person holding or standing near a cooking surface (e.g., stove, grill)
+* The object (carrot, hot dog, pizza, sandwich) placed on the cooking surface
+* Flames, heat, or cooking utensils (e.g., spatula, tongs) in the vicinity
+* A warm or golden-brown color tone indicating cooking
+* Possibly steam or smoke rising from the object
+
+These features are common across the objects being cooked.
+
+15
+For the action "a person is cutting the object", common visual features include:
+
+* A person's hand holding a cutting tool (e.g., knife, scissors)
+* The object being cut is partially or fully separated
+* Cutting motion or movement depicted
+* Possible presence of food debris or crumbs
+* Background may show a kitchen or table setup
+
+Shared visual features across objects: cutting tool, cutting motion, and object being cut.
+
+16
+For the action "a person is cutting with an object", common visual features shared by objects like knife and scissors include:
+
+* Sharp edge or blade
+* Person's hand holding the object with a grasping or pinching motion
+* Object in motion, with a cutting or slicing action
+* Possibly, a cutting board, food, or other material being cut.
+
+17
+For the action "a person is directing the object", common visual features include:
+
+* A person (typically an adult) standing or sitting near the object
+* The person's arm or hand pointing or gesturing towards the object
+* The object (airplane, bus, car, truck) in the background or in the scene
+* The person's facial expression indicating direction or guidance
+
+18
+The visual features for the action "a person is dragging an object" include:
+
+* A person (typically with a human body) in the scene
+* An object (such as a suitcase or surfboard) being pulled or dragged by the person
+* The object is often behind the person, with the person's hand or arm grasping or holding it
+* The person's body language and facial expression may convey effort, strain, or exertion
+* The scene often includes a background or environment, such as a floor, road, or beach.
+
+Common visual features shared by the objects include the person's grip, the object's size and shape, and the direction of movement.
+
+19
+For the action "a person is dribbling an object", common visual features include:
+
+* A person's hand or hands in contact with the object
+* The object (e.g. sports ball) is moving in a circular motion
+* The person's arm or leg is moving to control the object's movement
+* The object is in mid-air, not in contact with the ground
+* The person's face and body are in a dynamic pose, indicating movement and action.
+
+20
+For the action "a person is drinking with the object", common visual features shared by objects like bottle and cup include:
+
+* A person's hand grasping or holding the object
+* The object's opening or mouth facing the person's mouth
+* Liquids or contents flowing from the object to the person's mouth
+* The person's lips or mouth touching the object's opening
+
+21
+For the action "a person is driving the object", common visual features include:
+
+* A person sitting in the driver's seat
+* Hands on the steering wheel or controls
+* Eyes focused on the road ahead
+* Feet on the pedals (if applicable)
+* A vehicle-like object with a clear distinction between the driver's compartment and the rest of the vehicle
+* A sense of movement or trajectory, indicating the vehicle is in motion
+
+22
+The visual features for the action "a person is drying an animal" include:
+
+* Person holding the animal
+* Animal (cat or dog) with fur or coat
+* Person using a towel or cloth to dry the animal
+* Animal's fur or coat appears wet or damp
+* Person's hands or arms in contact with the animal
+* Background is often a bathroom, kitchen, or living room
+
+Common visual features shared by both cat and dog include the person holding the animal, animal's wet fur, and person's hands or arms in contact with the animal.
+
+23
+For the action "a person is eating the object", common visual features include:
+
+* A person's hand or mouth in contact with the object
+* The object partially consumed or with visible bite marks
+* A facial expression indicating eating (e.g. smiling, focused)
+* A surrounding context suggesting a meal or snack setting
+
+24
+The visual features for "a person eating at an object" typically include:
+
+* A person seated or standing near the object
+* The object (e.g. dining table) with food and/or utensils present
+* The person holding or using utensils (e.g. fork, spoon, knife)
+* Food or dishes on the object
+* The person's hands and face involved in eating
+
+Common visual features shared by objects: presence of food, utensils, and human interaction.
+
+25
+The visual features for the action "a person is exiting the object" include:
+
+* A person's body in motion, often with arms and legs visible
+* The object's door or exit point is open or partially open
+* The person's trajectory is away from the object, indicating exit
+* Often, the object's surroundings (e.g. airport, dock, station) are visible
+
+These features are common across airplane, boat, bus, and train exits.
+
+26
+For the action "a person is feeding the object", common visual features include:
+
+* A person holding a food item (e.g. bread, fruit, or grains)
+* The object (e.g. bird, cat, cow) approaching or standing near the person
+* The object's mouth or beak open, ready to receive food
+* The person's hand or container holding the food near the object's mouth
+* A gentle or calm atmosphere, indicating a peaceful interaction.
+
+27
+For the action "a person is filling the object", common visual features shared by objects like cups and wine glasses include:
+
+* The object is partially or fully empty at the start
+* The person's hand is visible, holding a liquid source (e.g., bottle, pitcher)
+* The person's arm is extended, pouring the liquid into the object
+* The liquid flows into the object, filling it partially or completely
+* The object's shape and contours are visible, with the liquid level rising to fill it.
+
+28
+For the action "a person is flipping the object", common visual features include:
+
+* A person's hand or arm grasping the object
+* The object (e.g. skateboard) rotating or spinning in mid-air
+* A blur or motion trail around the object
+* The person's body in a dynamic pose, often with bent knees and extended arms
+* A sense of movement and action in the image
+
+29
+The visual features for "a person is flushing an object" action typically include:
+
+* A person's hand or arm moving towards the object
+* The object (e.g., toilet) being lifted or pushed
+* Water or liquid flowing out of the object
+* A sound effect or audio cue indicating the flushing action
+* A sense of movement or motion around the object
+
+Common visual features shared by objects, such as toilets, include the person's hand or arm interacting with the object and the flow of water or liquid.
+
+30
+The visual features for "a person is flying the object" action include:
+
+* A person holding or controlling the object
+* The object suspended in the air or moving upward
+* The person's arms or hands guiding the object's trajectory
+* A sense of motion or movement in the scene
+
+Common visual features shared by airplane and kite include: person's control, object's suspension, and sense of motion.
+
+31
+For the action "a person is greeting an object", common visual features include:
+
+* The person's arms are extended, often with palms facing upwards or outwards
+* The person's hands are open, with fingers spread or curled
+* The object is typically held or touched by the person's hands
+* The person's facial expression is often smiling or friendly
+* The object is usually at a comfortable distance from the person's face.
+
+32
+For the action "a person is grinding the object", common visual features include:
+
+* Person in a riding position, with one foot on the object and the other on the ground
+* Object (skateboard or snowboard) in contact with the ground, with the person applying pressure
+* Wheels or edges of the object in contact with the ground, creating a scraping or grinding sound
+* Person's body angled or leaning to maintain balance and control
+* Possible appearance of dust, dirt, or smoke from the grinding action.
+
+33
+The visual features for "a person grooming an object" action include:
+
+* Person's hands touching the object's fur or coat
+* Object's fur or coat being brushed, combed, or cleaned
+* Person's hands moving in a gentle, sweeping motion
+* Object's facial expression or body language indicating relaxation or comfort
+* Background context suggesting a grooming or care environment.
+
+34
+The visual features for the action "a person is herding the object" include:
+
+* A person (usually an adult) in the center of the frame
+* The object (cow or sheep) is in the periphery, moving towards the person
+* The person is often holding a stick, whip, or other herding tool
+* The object is often in a scattered or dispersed formation, with the person guiding them towards a common direction or area
+* The scene often features a natural environment, such as a field or pasture.
+
+35
+For the action "a person hitting an object", common visual features include:
+
+* Person's arm or hand making contact with the object
+* Object in mid-air or after impact
+* Person's body language indicating force or motion
+* Object's shape and size vary depending on type (e.g., sports ball)
+* Visual cues like blur, motion lines, or sparks to convey dynamic movement.
+
+36
+For the action "a person is holding the object", common visual features include:
+
+* The person's hand or hands grasping the object
+* The object being held in front of the person's body
+* The object's shape and outline visible
+* The person's arm(s) and hand(s) in a natural holding position
+
+These features are shared across various objects, including the ones listed.
+
+37
+For the action "a person is hopping on the object", common visual features include:
+
+* A person's legs and feet in mid-air or in a jumping motion
+* The object (bicycle, horse, motorcycle, elephant) in a stationary or slow-moving position
+* The person's arms outstretched or grasping the object for balance
+* A sense of dynamic movement and energy in the scene.
+
+38
+The visual features for the action "a person is hosing the object" include:
+
+* Person holding a hose or water spray nozzle
+* Object being hosed (e.g. car, dog, potted plant, elephant) in close proximity to the person
+* Water spray or stream visible, potentially creating a mist or splash
+* Person's arm or hand in motion, indicating the action of spraying water
+* Background context suggesting an outdoor or yard setting.
+
+39
+For the action "a person is hugging the object", common visual features include:
+
+* A person's arms wrapped around the object
+* The object's body or head visible and in close proximity to the person's arms
+* A sense of physical contact and affection between the person and object
+* The person's face and body language conveying affection or fondness.
+
+40
+For the action "a person is hunting a bear", common visual features include:
+
+* A person (typically with a hunting gear) in a hunting pose
+* A bear (large, furry, and often in a defensive or fleeing pose)
+* A background with a natural environment (e.g., forest, wilderness)
+* A sense of movement or action (e.g., the person is stalking, aiming, or shooting)
+* A focus on the interaction between the person and the bear
+
+41
+For the action "a person is inspecting the object", common visual features include:
+
+* Close-up view of the object
+* Person's hands or fingers touching or holding the object
+* Person's face or eyes focused on the object
+* Object in a static or stationary position
+* Soft, gentle, or deliberate movements of the person's hands or arms
+
+42
+For the action "a person installing a traffic light", common visual features include:
+
+* A person holding or standing near the object
+* The object (traffic light) being partially or fully disassembled
+* Tools or equipment nearby (e.g. screwdrivers, ladders)
+* A background with urban or infrastructure context (e.g. road, sidewalk, buildings)
+
+43
+For the action "a person is jumping on an object", common visual features include:
+
+* Person in mid-air, legs bent and arms outstretched
+* Object (e.g. bicycle, boat) in motion, often blurred
+* Dynamic composition with strong sense of movement
+* Bright colors and high contrast to emphasize action
+
+44
+For the action "a person kicking a sports ball", common visual features include:
+
+* A person's leg extending to make contact with the ball
+* Ball flying through the air after being kicked
+* Person's foot making contact with the ball, often with a visible impact
+* Ball's trajectory and movement after being kicked
+* Background context, such as a playing field or stadium.
+
+45
+For the action "a person is kissing the object", common visual features include:
+
+* The person's face is close to the object's face or body
+* The person's lips are touching or almost touching the object
+* The object's face or body is visible, with a gentle or relaxed expression
+* The scene is often intimate and tender, with a focus on the interaction between the person and the object.
+
+46
+For the action "a person is lassoing an object", common visual features include:
+
+* A person holding a rope or lasso
+* An object (e.g. cow) being lassoed, often with a loop of rope around it
+* The rope forming a circular shape around the object
+* The person's arm and hand in a throwing or swinging motion
+* The object often looking relaxed or unaware of the lasso
+
+47
+For the action "a person is launching the object", common visual features include:
+
+* A person holding or grasping the object
+* The object being lifted or thrown into the air
+* A slight angle or trajectory of the object as it leaves the person's hand
+* The person's arm or body in motion, indicating the action of launching
+* A sense of movement or energy in the scene
+
+48
+The visual features for the action "a person is licking the object" include:
+
+* Tongue extension from the person's mouth
+* Contact between the tongue and the object
+* Object's surface is in close proximity to the person's mouth
+* Person's facial expression is likely relaxed or focused
+* Object's shape and texture may be visible around the area of contact
+
+Common to all objects: Tongue extension and object contact.
+
+49
+For the action "a person is lying on the object", common visual features include:
+
+* A person's body (torso, arms, legs) in a reclined position
+* The object's surface is visible beneath the person
+* The person's head is likely tilted or resting on the object
+* A sense of relaxation or restfulness is conveyed
+
+50
+For the action "a person is lifting the object", common visual features shared by objects like a fork include:
+
+* Person's hand grasping the object
+* Object's shape and size varying (e.g., fork's tines)
+* Person's arm and shoulder visible
+* Object's orientation changing (e.g., fork's prongs lifting)
+* Person's facial expression and body language indicating effort or movement
+
+51
+For the action "a person is lighting the object", common visual features shared by objects like cake include:
+
+* A person holding a lighter or matchstick
+* The object (cake) being illuminated by the flame
+* A warm, golden glow on the object's surface
+* Shadows cast on surrounding surfaces
+* A sense of movement or action in the scene
+
+52
+For the action "a person is loading the object", common visual features include:
+
+* A person standing or bending near the object
+* The object being lifted, carried, or placed into a vehicle or container
+* The person's hands or arms interacting with the object
+* A sense of movement or action around the object
+
+53
+For the action "a person is losing the object" with an umbrella, common visual features include:
+
+* Person's hand releasing or dropping the umbrella
+* Umbrella falling or being blown away
+* Person's facial expression showing surprise, disappointment, or frustration
+* Umbrella's shape and color visible as it falls or flies away
+
+54
+For the action "a person is making the object", common visual features include:
+
+* A person's hands holding or manipulating the object
+* A surface or background with utensils, ingredients, or tools nearby
+* A sense of movement or action, such as a hand lifting or placing the object
+* A focus on the object being created or prepared
+
+55
+For the action "a person is milking a cow", common visual features include:
+
+* A person's hand or hands grasping the cow's udder
+* The cow's udder being squeezed or massaged
+* Milk flowing from the udder into a container or bucket
+* The cow's face or body in the background, often with a calm or relaxed expression
+* A milking stool or other equipment nearby
+
+56
+For the action "a person is moving the object", common visual features include:
+
+* A person's hand or arm in contact with the object
+* The object changing position or location
+* Motion blur or streaks around the object
+* The person's body language indicating effort or movement (e.g., bent knees, stretched arms)
+* The object's shape and texture remaining consistent despite movement
+
+57
+For the action "a photo of a person and the object with no interaction", common visual features include:
+
+* The person is standing or sitting near the object
+* The object is stationary and not in motion
+* The person and object are in a neutral or static pose
+* The background is often blurred or not relevant to the interaction
+* The focus is on the person-object pairing, with minimal context or environment.
+
+58
+For the action "a person is opening the object", common visual features include:
+
+* A person's hand grasping or manipulating the object
+* The object being rotated, lifted, or pulled to reveal its contents or functionality
+* The object's lid, zipper, or flap being opened or moved
+* A slight change in the object's shape or appearance as it is opened
+
+These features are shared across objects such as bottles, backpacks, books, and more.
+
+59
+For the action "a person is operating the object", common visual features include:
+
+* Person's hand grasping or holding the object
+* Object's buttons, knobs, or levers being manipulated by the person's hand
+* Person's fingers or thumb pressing or rotating the object's controls
+* Object's display screen or indicator lights showing operation status
+* Person's body language indicating focus or attention on the object
+
+60
+For the action "a person is packing the object" (suitcase), common visual features include:
+
+* Person's hands holding or grasping the suitcase
+* Suitcase's zipper or lid opening/closing
+* Person's arms and hands moving in a packing motion
+* Suitcase's contents visible (e.g., clothes, bags, etc.)
+* Background showing a travel-related context (e.g., hotel room, airport)
+
+61
+The visual features for the action "a person is painting the object" may include:
+
+* A person holding a brush or painting tool
+* The object (fire hydrant or vase) being painted, with visible brushstrokes or colors
+* A background or surface where the painting is taking place
+* The person's hands or arms in motion, indicating the act of painting
+* Possibly, paint splatters or spills around the object
+
+Common visual features shared by both objects include the person, brush, and painting action.
+
+62
+For the action "a person is parking the object", common visual features shared by bicycle, car, and motorcycle include:
+
+* A person standing near the object
+* The object (bicycle, car, or motorcycle) positioned near a wall, curb, or other stable surface
+* The person interacting with the object (e.g., adjusting mirrors, applying brakes, or locking wheels)
+* A sense of spatial awareness, with the person considering the object's proximity to surrounding obstacles.
+
+63
+For the action "a person is paying the object", common visual features include:
+
+* A person's hand reaching out to touch or interact with the object
+* The object (e.g. parking meter) has a payment slot or interface
+* Coins, bills, or a payment card being inserted or placed into the slot
+* A visual indication of payment processing, such as a payment confirmation screen or a receipt being printed.
+
+64
+The visual features for "a person peeling an object" action are:
+
+* A person's hand holding the object
+* The object being partially or fully peeled, revealing its inner layers
+* A curved or spiral shape of the peel being removed
+* A sense of movement and action, with the peel curling away from the object
+
+Common features shared by apple, banana, carrot, and orange are the curved or spiral shape of the peel being removed and the sense of movement and action.
+
+65
+For the action "a person is petting an object", common visual features shared by the objects include:
+
+* Soft, curved or rounded shapes (e.g., animal's body, head, or ears)
+* Gentle touch or stroking motion
+* Person's hand or fingers making contact with the object
+* Facial expressions of affection or tenderness on the person's face
+* Object's facial features (if applicable) showing relaxation or contentment
+
+66
+For the action "a person is picking an object", common visual features shared by apple, banana, and orange include:
+
+* A person's hand reaching out to grasp the object
+* The object held or lifted by the person's hand
+* A gentle or soft grasping motion
+* The object's shape and color visible, potentially with slight deformation from being picked
+* The person's face and body language indicating focus or intent.
+
+67
+For the action "a person is picking up the object", common visual features include:
+
+* A person's hand or arm reaching out to grasp the object
+* The object being lifted or moved towards the person's body
+* A clear distinction between the person's hand and the object
+* The object's shape, size, and texture visible as it is lifted
+* The person's facial expression and body language indicating the action
+
+68
+For the action "a person is pointing to an object", common visual features include:
+
+* A person's hand or finger extended towards the object
+* A clear direction of gaze towards the object
+* The object being pointed to is often in focus, while the background is blurred
+* The person's body language and facial expression may convey attention and focus
+
+69
+For the action "a person is pouring an object", common visual features include:
+
+* A person's hand holding the object (bottle or cup)
+* The object tilted or angled for pouring
+* Liquid flowing from the object
+* The person's arm or hand moving in a pouring motion
+* A background or surface to receive the poured liquid
+
+70
+For the action "a person is pulling the object", common visual features shared by objects like kite and tie include:
+
+* A person's hand or arm grasping the object
+* The object being pulled towards the person
+* Tension or strain on the object's material (e.g., kite string or tie fabric)
+* The person's body language indicating effort or force being applied
+
+71
+For the action "a person is pushing a [bicycle/motorcycle]", common visual features include:
+
+* A person's hand or hands in contact with the object
+* The object is stationary or moving slowly
+* The person's body is positioned in front of or beside the object
+* The object's wheels are not in motion
+* The person's facial expression and body language convey effort or struggle.
+
+72
+The visual features for the action "a person is racing an object" include:
+
+* A person in a dynamic pose, often with their body leaning forward
+* The object (horse or motorcycle) in motion, with blurred or distorted background
+* A sense of speed and movement conveyed through the blur of the object's wheels or hooves
+* A focus on the person's facial expression, often showing concentration or excitement
+* A dynamic composition with lines and shapes that follow the direction of motion.
+
+73
+For the action "a person is reading an object", common visual features include:
+
+* A person's hand holding the object
+* The object is held close to the person's face
+* Eyes are focused on the object
+* Head is tilted or angled to facilitate reading
+* A sense of attention and concentration on the person's face
+
+74
+For the action "a person is releasing an object (which can be a bird)", common visual features include:
+
+* Person's hand opening or fingers spreading apart
+* Object (bird) leaving the hand or person's grasp
+* Object's trajectory or flight path visible
+* Person's facial expression indicating release (e.g., relaxed, focused)
+* Contextual elements like sky, ground, or surrounding environment.
+
+75
+For the action "a person is repairing the object", common visual features include:
+
+* Person holding tools (e.g. screwdriver, wrench, pliers)
+* Object with visible damage or disassembly (e.g. broken parts, loose screws)
+* Person's hands interacting with the object (e.g. tightening, loosening, replacing parts)
+* Background with workspace or tools nearby (e.g. workbench, toolbox, manual)
+* Attention to detail and focus on the repair process.
+
+76
+The visual features for "a person riding an object" include:
+
+* A person seated or standing on the object
+* The person's legs and feet in contact with the object
+* The object moving or in motion
+* The person's body language indicating balance and control
+* A clear distinction between the person and the object
+
+77
+For the action "a person is rowing the object", common visual features include:
+
+* A person seated or standing near the object
+* The person holding or grasping an oar or paddle
+* The object (boat) moving through water, with waves or ripples visible
+* The person's body language indicating effort and movement (e.g. bent knees, stretched arms)
+* Water splashing or spray around the object and person
+
+78
+For the action "a person is running with an object", common visual features include:
+
+* The person is in motion, with blurred legs and arms
+* The object (dog or horse) is also moving, with blurred legs and body
+* The person's arms are often outstretched, holding the object
+* The object's head and ears are often visible, with a flowing mane or tail
+* The background is often blurred, with a sense of motion and dynamic energy
+
+79
+For the action "a person is sailing the object", common visual features shared by objects (such as boats) include:
+
+* A person standing or sitting on the object
+* The object moving or gliding on water
+* Sails or a sail-like structure visible
+* Rudder or steering mechanism in use
+* Water surrounding the object
+
+80
+The visual features for the action "a person is scratching an object" include:
+
+* Person's hand or fingers making contact with the object
+* Object (cat or dog) showing signs of scratching, such as:
+	+ Scratches or marks on the surface
+	+ Fur or hair being pulled or ruffled
+	+ Eyes or ears of the animal being scratched
+* Person's facial expression showing affection or playful intent
+* Contextual clues, such as a relaxed or playful environment
+
+81
+For the action "a person is serving a sports ball", common visual features include:
+
+* A person (typically with a racket or hand) in a serving stance
+* A sports ball (e.g. tennis, volleyball, basketball) held or tossed by the person
+* A dynamic pose, with the person in motion or about to release the ball
+* A clear distinction between the person and the background
+* A focus on the ball and the person's action
+
+82
+For the action "a person is setting the object", common visual features include:
+
+* A person's hand or arm holding the object
+* The object being placed or set down on a surface (e.g., table, ground)
+* The person's body language indicating intention to set the object (e.g., bent knees, forward lean)
+* The object being oriented in a specific way (e.g., clock face up, umbrella tip down)
+
+These features are shared by both clock and umbrella.
+
+83
+The visual features for the action "a person is shearing an object" typically include:
+
+* A person holding shears or a shearing tool
+* An object (e.g., sheep) with fur or wool being cut or removed
+* Movement or motion of the shears or object
+* Possibly a background or environment (e.g., farm, field)
+* The person's body language and facial expression may also convey the action
+
+Common visual features shared by objects (e.g., sheep) include:
+
+* Fleece or wool being cut or removed
+* The object's body language (e.g., standing, lying down)
+* Possibly a slight movement or reaction to the shearing process
+
+84
+For the action "a person is signing an object", common visual features include:
+
+* Person's hand holding the object
+* Object (baseball bat or sports ball) being held in a specific orientation
+* Person's hand or fingers making contact with the object
+* Signature or scribble visible on the object's surface
+* Contextual elements like background, lighting, and facial expressions.
+
+85
+For the action "a person is sipping the object", common visual features include:
+
+* The person's hand holding the object
+* The object's shape and curvature (e.g. cup, spoon, wine glass)
+* The liquid level in the object (e.g. tea, water, wine)
+* The person's lips touching or near the object's rim
+* A gentle, smooth motion of the person's hand and lips.
+
+86
+For the action "a person is sitting at the object", common visual features shared by objects like dining tables include:
+
+* A flat surface
+* Legs or a base for support
+* A person's body and limbs visible
+* A sense of depth and perspective
+* A focus on the person's activity or interaction with the object
+
+87
+For the action "a person is sitting on the object", common visual features shared by the objects include:
+
+* A person's legs and feet visible, often with feet resting on the object
+* The object's surface is horizontal or nearly horizontal
+* The person's back and/or head are often supported by the object
+* The object's shape and size are visible, with the person's body occupying a portion of it.
+
+88
+The visual features for "a person sliding an object" action include:
+
+* A person's hand grasping the object
+* The object (e.g., pizza) moving in a horizontal direction
+* The person's arm and body in a dynamic pose
+* A sense of movement and blur around the object
+
+Common visual features shared by objects (like pizza) include the object's shape, size, and texture, which may be distorted or blurred due to the sliding motion.
+
+89
+For the action "a person is smelling the object", common visual features include:
+
+* The person's nose is close to the object
+* The object is held in the person's hand or near their face
+* The person's eyes are focused on the object
+* The object is in a clear view, with no obstacles or distractions
+* The person's facial expression may indicate the smell's pleasantness or unpleasantness.
+
+90
+For the action "a person spinning an object", common visual features include:
+
+* Circular motion: The object rotates around its central axis.
+* Person's hand or arm: The person's hand or arm is visible, grasping or holding the object.
+* Object's shape: The object's shape is visible, potentially with details like ridges, panels, or laces.
+* Movement blur: The object and person's hand/arm may be blurred due to the rapid motion.
+* Lighting effects: Shadows or highlights may be visible on the object and person's hand/arm due to the spinning motion.
+
+91
+For the action "a person squeezing an object", common visual features include:
+
+* Object deformation or compression
+* Person's hand or fingers wrapping around the object
+* Object's shape or texture changing due to the squeeze
+* Person's facial expression indicating effort or strain
+* Orange objects may exhibit a vibrant color and slight squishing or bulging.
+
+92
+The visual features for the action "a person is stabbing the object" include:
+
+* Sharp, pointed object (e.g., knife, sword, etc.)
+* Person holding the object with a grasping or piercing motion
+* Object being stabbed or pierced, potentially with blood or damage visible
+* Person's facial expression may show aggression, focus, or intensity
+
+Common visual features shared by the objects include: sharp points, edges, or surfaces that facilitate piercing or stabbing.
+
+93
+The visual features for "a person standing on an object" action include:
+
+* A person's upper body, arms, and legs visible
+* The object's surface and shape visible, with the person's feet on it
+* The person's weight distributed on the object, with possible slight bending or leaning
+* The object's size and shape relative to the person's size and pose
+
+Common to all objects: the person's feet on the object's surface, and the object's shape and size visible.
+
+94
+For the action "a person is standing under an object", common visual features include:
+
+* A person's upper body and head visible
+* Object above the person, casting a shadow or creating an overhead structure
+* Person's posture indicating they are standing or leaning under the object
+* Contrast between the object's color and the surrounding environment
+
+These features are shared across objects like stop signs, traffic lights, and umbrellas.
+
+95
+The visual features for the action "a person is sticking an object" include:
+
+* A person's hand holding the object
+* The object being inserted into a surface (e.g., a plate, tablecloth)
+* The object's shape and size remain visible
+* The person's hand and object form a 90-degree angle
+* A slight movement or tension in the person's hand indicates the action
+
+Common visual features shared by objects like fork and knife: the object's shape, size, and material remain visible, and the person's hand and object form a 90-degree angle.
+
+96
+The visual features for the action "a person is stirring the object" include:
+
+* A person's hand or arm moving in a circular motion
+* The object (bowl, broccoli, or carrot) being manipulated by the person's hand
+* A blurred or out-of-focus background to emphasize the action
+* A focus on the person's hand and the object being stirred
+* A sense of movement and fluidity in the image
+
+Common visual features shared by the objects include the person's hand or arm moving in a circular motion and the object being manipulated by the person's hand.
+
+97
+The visual features for the action "a person is stopping at the object" include:
+
+* A person in a standing or sitting position
+* An object (stop sign or traffic light) in the foreground
+* The person's posture indicates stopping or slowing down (e.g., feet shoulder-width apart, hands on the object)
+* The object is typically rectangular or circular in shape
+* The object has a distinct color or design (e.g., stop sign is typically red and octagonal, traffic light is typically red, yellow, and green)
+
+98
+For the action "a person is straddling the object", common visual features include:
+
+* The person's legs and body positioned across the object's length
+* The object's shape and contours visible beneath the person
+* The person's upper body and head oriented away from the object
+* The object's movement or stance indicating the person's position
+
+99
+For the action "a person is swinging the object", common visual features include:
+
+* Person holding the object with both hands
+* Object held at an angle, not parallel to the ground
+* Person's arms and hands moving in a circular motion
+* Object moving in an arc, potentially leaving a trail or blur
+* Person's body and arms in motion, with a sense of dynamism and energy.
+
+100
+For the action "a person is tagging an object", common visual features include:
+
+* A person's hand holding a tagging device (e.g., pen, marker, sticker)
+* The object being tagged (e.g., person, surface, object)
+* A clear indication of the tagging action (e.g., pen stroke, sticker placement)
+* The person's hand or arm in proximity to the object
+* A background that is not obstructing the tagging action
+
+101
+The visual features for "a person talking on an object" action include:
+
+* A person's face and body in the frame
+* The object (e.g. cell phone) held to the person's ear or mouth
+* A phone's screen displaying a conversation interface (e.g. phone number, text message)
+* A person's hand holding the object
+* A subtle smile or expression indicating conversation
+
+Common visual features shared by objects: person's face, hand, and object's screen.
+
+102
+For the action "a person is teaching the object", common visual features include:
+
+* A person (teacher) in a dominant position, often standing or sitting
+* The object (student) facing the teacher, with a receptive or attentive posture
+* Eye contact between the teacher and student
+* A sense of guidance or instruction, often conveyed through gestures or body language
+
+103
+Common visual features for "a person texting on an object" include:
+
+* Person's hand holding the object
+* Object's screen displaying a keyboard or text input interface
+* Person's fingers typing on the screen or keypad
+* Object's shape and design indicating it's a cell phone or similar device
+* Contextual clues like a background or surrounding environment.
+
+104
+The visual features for "a person throwing an object" include:
+
+* A person's arm extended, with the object held in hand
+* The object in mid-air, with a trajectory indicating motion
+* A blur or streak effect around the object due to motion
+* The person's face and body language indicating effort or concentration
+* A background that is blurry or out of focus due to the motion.
+
+Common visual features shared by objects (baseball bat, frisbee, sports ball) include the person's arm extension and the object's trajectory.
+
+105
+The visual features for the action "a person is tying the object" include:
+
+* A person's hands holding the object
+* The object being manipulated by the person's hands
+* A clear visual representation of the tying process (e.g. loops, knots, etc.)
+* The object's shape and size being affected by the tying action
+
+Common visual features shared by boat and tie are:
+
+* A clear visual representation of the tying process
+* The object being manipulated by the person's hands
+
+106
+For the action "a person toasting an object", common visual features include:
+
+* A person holding an object (e.g. wine glass) in a raised position
+* The object is tilted or angled, with the rim or opening facing the person
+* The person's hand or arm is positioned near the object, often with a slight bend or flex
+* A subtle smile or gesture of celebration is often present
+
+107
+For the action "a person is training the object", common visual features shared by dog and horse include:
+
+* Person holding or guiding the object with a harness, leash, or reins
+* Object (dog or horse) following the person's direction or movement
+* Person using verbal commands, hand signals, or body language to guide the object
+* Object responding to the person's cues, such as sitting, standing, or moving in a specific direction
+
+108
+For the action "a person is turning the object" (motorcycle), common visual features include:
+
+* Person's hands grasping the handlebars or grips
+* Rotation of the motorcycle's wheels or tires
+* Movement of the motorcycle's body, such as leaning or tilting
+* Person's body language indicating control and balance
+* Background context indicating a dynamic or action-packed scene.
+
+109
+For the action "a person is typing on the object", common visual features shared by keyboard and laptop include:
+
+* Fingers moving on the surface
+* Hands grasping the object
+* Eyes focused on the screen or keyboard
+* Facial expressions indicating concentration
+* Object's surface reflecting light
+
+110
+For the action "a person is walking an object", common visual features include:
+
+* A person's legs and feet moving in a walking motion
+* The object being carried or led by the person, with its legs or wheels in motion
+* The person's hands or arms interacting with the object
+* The object's size and shape relative to the person
+* The scene's context, such as a path, road, or field.
+
+These features are present across the objects, including bicycle, cow, dog, horse, motorcycle, sheep, and elephant.
+
+111
+For the action "a person is washing the object", common visual features include:
+
+* The object is typically placed in a sink or a basin
+* Water and soap or cleaning agent are present
+* The person is holding a cleaning tool (e.g. sponge, brush, cloth)
+* The object is being scrubbed, rinsed, or wiped clean
+
+112
+For the action "a person is watching the object", common visual features include:
+
+* A person's face with focused attention (e.g., eyes on the object)
+* A slight smile or expression of interest
+* The object in the background, often with a clear view of its features
+* The person's body language indicating engagement (e.g., leaning forward, eyes fixed on the object)
+
+These features are consistent across various objects, including bird, TV, bear, elephant, giraffe, and zebra.
+
+113
+For the action "a person is waving an object", common visual features include:
+
+* Person's arm extended and moving in a waving motion
+* Object held in hand, often with fingers wrapped around it
+* Object's shape and size vary, but bus is a possible example
+* Background and context may vary, but the action is the focus
+
+114
+For the action "a person is wearing the object", common visual features shared by the objects (backpack, baseball glove, skis, snowboard, tie) include:
+
+* The object is attached to the person's body (e.g. on the back, hand, or neck)
+* The object is in contact with the person's skin or clothing
+* The object's shape and size are visible, often with details like straps, buckles, or textures.
+
+115
+For the action "a person is wielding the object", common visual features include:
+
+* A person holding the object with both hands
+* The object is positioned in front of the person's body
+* The person's dominant hand is often closer to the object's handle
+* The object is held at an angle, with the person's arm bent
+* The person's face and body language convey a sense of control or aggression.
+
+116
+The visual features for the action "a person is zipping an object" typically include:
+
+* A person's hand holding the object's zipper
+* The zipper in a partially or fully closed position
+* The object's shape and design, such as a suitcase
+* The person's hand and arm in a specific pose to indicate the action of zipping
+* Possible additional features like luggage tags, handles, or straps on the object.

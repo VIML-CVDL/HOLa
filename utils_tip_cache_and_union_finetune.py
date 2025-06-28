@@ -1,0 +1,858 @@
+"""
+Utilities
+
+Fred Zhang <frederic.zhang@anu.edu.au>
+
+The Australian National University
+Australian Centre for Robotic Vision
+"""
+
+from code import interact
+from fileinput import filename
+from locale import normalize
+import os
+import torch
+import pickle
+import numpy as np
+import scipy.io as sio
+import json
+
+from torchvision.transforms import Resize, CenterCrop
+
+from tqdm import tqdm
+from collections import defaultdict
+from torch.utils.data import Dataset
+
+from vcoco.vcoco import VCOCO
+from hicodet.hicodet import HICODet
+from hico_text_label import hico_unseen_index, HOI_TO_AO, ACT_IDX_TO_ACT_NAME, obj_to_name, OBJ_IDX_TO_COCO_ID, MAP_AO_TO_HOI
+from vcoco_text_label import MAP_AO_TO_HOI_COCO
+import sys
+sys.path.append('../pocket/pocket')
+import pocket
+from pocket.core import DistributedLearningEngine
+from pocket.utils import DetectionAPMeter, BoxPairAssociation
+
+import sys
+sys.path.append('detr')
+import detr.datasets.transforms_clip as T
+import pdb
+import copy 
+import pickle
+import torch.nn.functional as F
+import clip
+from util import box_ops
+from PIL import Image
+from hicodet.static_hico import HICO_INTERACTIONS
+from hico_text_label import HICO_INTERACTIONS, hico_unseen_index 
+import cv2
+import random
+import matplotlib.pyplot as plt
+from sklearn.manifold import TSNE
+import pickle
+
+def custom_collate(batch):
+    images = []
+    targets = []
+    # images_clip = []
+    
+    for im, tar in batch:
+        images.append(im)
+        targets.append(tar)
+        
+        # images_clip.append(im_clip)
+    return images, targets
+
+class DataFactory(Dataset):
+    def __init__(self, name, partition, data_root, clip_model_name, zero_shot=False, zs_type='rare_first', num_classes=600, detr_backbone="R50", syn = None): ##ViT-B/16, ViT-L/14@336px
+        if name not in ['hicodet', 'vcoco']:
+            raise ValueError("Unknown dataset ", name)
+        assert clip_model_name in ['ViT-L/14@336px', 'ViT-B/16',  'ViT-B/32']
+        self.clip_model_name = clip_model_name
+        if self.clip_model_name == 'ViT-B/16' or self.clip_model_name == 'ViT-B/32':
+            self.clip_input_resolution = 224
+        elif self.clip_model_name == 'ViT-L/14@336px':
+            self.clip_input_resolution = 336
+        
+        if name == 'hicodet':
+            assert partition in ['train2015', 'test2015'], \
+                "Unknown HICO-DET partition " + partition
+            self.dataset = HICODet(
+                root=os.path.join(data_root, 'hico_20160224_det/images', partition),
+                anno_file=os.path.join(data_root, 'instances_{}.json'.format(partition)),
+                target_transform=pocket.ops.ToTensor(input_format='dict')
+            )
+            if syn is not None:
+                self.syndataset = HICODet(
+                root=os.path.join("./syn_data", syn[0]),
+                anno_file=os.path.join("./syn_data", syn[1]),
+                target_transform=pocket.ops.ToTensor(input_format='dict')
+                )
+                self.dataset = self.dataset + self.syndataset
+
+        else:
+            assert partition in ['train', 'val', 'trainval', 'test'], \
+                "Unknown V-COCO partition " + partition
+            image_dir = dict(
+                train='mscoco2014/train2014',
+                val='mscoco2014/train2014',
+                trainval='mscoco2014/train2014',
+                test='mscoco2014/val2014'
+            )
+            self.dataset = VCOCO(
+                root=os.path.join(data_root, image_dir[partition]),
+                anno_file=os.path.join(data_root, 'instances_vcoco_{}.json'.format(partition)
+                ), target_transform=pocket.ops.ToTensor(input_format='dict')
+            )
+        # add clip normalization
+        self.normalize = T.Compose([
+            T.ToTensor(),
+            T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
+
+        scales = [480, 512, 544, 576, 608, 640, 672, 704, 736, 768, 800]
+        if partition.startswith('train'):
+            self.transforms = T.Compose([
+                T.RandomHorizontalFlip(),
+                T.ColorJitter(.4, .4, .4),
+                T.RandomSelect(
+                    T.RandomResize(scales, max_size=1333),
+                    T.Compose([
+                        T.RandomResize([400, 500, 600]),
+                        T.RandomSizeCrop(384, 600),
+                        T.RandomResize(scales, max_size=1333),
+                    ])
+                ),
+            ])
+            self.clip_transforms = T.Compose([
+                T.IResize([self.clip_input_resolution,self.clip_input_resolution]),
+            ])
+        else:   
+            self.transforms = T.Compose([
+                T.RandomResize([800], max_size=1333),
+            ])
+            self.clip_transforms = T.Compose([
+                T.IResize([self.clip_input_resolution,self.clip_input_resolution]),
+            ])
+        
+        self.partition = partition
+        self.name = name
+        self.count=0
+        self.zero_shot = zero_shot
+        if self.name == 'hicodet' and self.zero_shot and self.partition == 'train2015':
+            self.zs_type = zs_type
+            self.filtered_hoi_idx = hico_unseen_index[self.zs_type]
+
+        device = "cuda"
+        # _, self.process = clip.load('ViT-B/16', device=device)
+        print(self.clip_model_name)
+        _, self.process = clip.load(self.clip_model_name, device=device)
+
+        self.keep = [i for i in range(len(self.dataset))]
+
+        if self.name == 'hicodet' and self.zero_shot and self.partition == 'train2015':
+            self.zs_keep = []
+            self.remain_hoi_idx = [i for i in np.arange(600) if i not in self.filtered_hoi_idx]
+
+            for i in self.keep:
+                (image, target), filename = self.dataset[i]
+                # if 1 in target['hoi']:
+                #     pdb.set_trace()
+                mutual_hoi = set(self.remain_hoi_idx) & set([_h.item() for _h in target['hoi']])
+                if len(mutual_hoi) != 0:
+                    self.zs_keep.append(i)
+            self.keep = self.zs_keep
+            if syn is None:
+                num_object_cls = self.dataset.num_object_cls
+                class_corr = self.dataset.class_corr
+            else:
+                num_object_cls = self.syndataset.num_object_cls
+                class_corr = self.syndataset.class_corr   
+
+            self.zs_object_to_target = [[] for _ in range(num_object_cls)]
+            if num_classes == 600:
+                for corr in class_corr:
+                    if corr[0] not in self.filtered_hoi_idx:
+                        self.zs_object_to_target[corr[1]].append(corr[0])
+            else:
+                for corr in class_corr:
+                    if corr[0] not in self.filtered_hoi_idx:
+                        self.zs_object_to_target[corr[1]].append(corr[2])
+        
+        if self.name == 'hicodet' and self.partition == 'train2015':
+            file_path = ("/mnt/disk2/qinqian/ADA-CM/hico_txt_llava/train_hico_descrip_train.txt")
+            with open(file_path, 'r') as file:
+                lines = file.readlines()
+                lines = [line.rstrip() for line in lines if line.rstrip()]
+        elif self.name == 'hicodet' and self.partition == 'test2015':
+            file_path = ("/mnt/disk2/qinqian/ADA-CM/hico_txt_llava/train_hico_descrip_test.txt")
+
+        elif self.name == 'vcoco' and self.partition == 'trainval':
+            file_path = ("/mnt/disk2/qinqian/ADA-CM/hico_txt_llava/train_vcoco_trainval.txt")
+
+        elif self.name == 'vcoco' and self.partition == 'test':
+            file_path = ("/mnt/disk2/qinqian/ADA-CM/hico_txt_llava/train_vcoco_test.txt")
+
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+            lines = [line.rstrip() for line in lines if line.rstrip()]
+
+        self.hico_txt_description = {}
+        cur_key = ''
+        for l_idx,line_i in enumerate(lines):
+            if self.name == 'hicodet':
+                if 'HICO' in line_i and '.jpg' in line_i:
+                    cur_key = line_i
+                    self.hico_txt_description[cur_key] = ''
+                else:
+                    self.hico_txt_description[cur_key] += line_i + ' '
+            elif self.name == 'vcoco':
+                if 'COCO' in line_i and '.jpg' in line_i:
+                    cur_key = line_i
+                    self.hico_txt_description[cur_key] = ''
+                else:
+                    self.hico_txt_description[cur_key] += line_i + ' '            
+
+        
+    def __len__(self):
+        return len(self.keep)
+        return len(self.dataset)
+
+    # train detr with roi
+    def __getitem__(self, i):
+        (image, target), filename = self.dataset[self.keep[i]]
+        # (image, target), filename = self.dataset[i]
+        if self.name == 'hicodet' and self.zero_shot and self.partition == 'train2015':
+            _boxes_h, _boxes_o, _hoi, _object, _verb = [], [], [], [], []
+            for j, hoi in enumerate(target['hoi']):
+                if hoi in self.filtered_hoi_idx:
+                    # pdb.set_trace()
+                    continue
+                _boxes_h.append(target['boxes_h'][j])
+                _boxes_o.append(target['boxes_o'][j])
+                _hoi.append(target['hoi'][j])
+                _object.append(target['object'][j])
+                _verb.append(target['verb'][j])           
+            target['boxes_h'] = torch.stack(_boxes_h)
+            target['boxes_o'] = torch.stack(_boxes_o)
+            target['hoi'] = torch.stack(_hoi)
+            target['object'] = torch.stack(_object)
+            target['verb'] = torch.stack(_verb)
+        w,h = image.size
+        target['orig_size'] = torch.tensor([h,w])
+
+        if self.name == 'hicodet':
+            target['labels'] = target['verb']
+            # Convert ground truth boxes to zero-based index and the
+            # representation from pixel indices to coordinates
+            target['boxes_h'][:, :2] -= 1
+            target['boxes_o'][:, :2] -= 1
+        else:
+            target['labels'] = target['actions']
+            target['object'] = target.pop('objects')
+            ## TODO add target['hoi']
+        
+        image, target = self.transforms(image, target)
+        image_clip, target = self.clip_transforms(image, target)  
+        image, _ = self.normalize(image, None)
+        image_clip, target = self.normalize(image_clip, target)
+        target['filename'] = filename
+
+        tnt_dep = self.hico_txt_description[filename][:300]
+        quit_len = len(tnt_dep.split(".")[-1])
+        if quit_len > 0:
+            tnt_dep = tnt_dep[:-quit_len]
+        target['text_descrip'] = tnt_dep
+        # print(filename, target['text_descrip'])
+        return (image,image_clip), target
+        image_0, target_0 = self.transforms[0](image, target)
+        image, _ = self.transforms[1](image_0, None)
+        # pdb.set_trace()
+        target_0['valid_size'] = torch.as_tensor(image.shape[-2:])
+        # pdb.set_trace()
+        image_clip, target = self.transforms[3](image_0, target_0) # resize 
+        image_clip, target = self.transforms[2](image_clip, target) # normlize
+        if image_0.size[-1] >1344 or image_0.size[-2] >1344:print(image_0.size)
+        target['filename'] = filename
+
+        return (image,image_clip), target
+
+    def expand2square(self, pil_img, background_color):
+        width, height = pil_img.size
+        if width == height:
+            return pil_img
+        elif width > height:
+            result = Image.new(pil_img.mode, (width, width), background_color)
+            result.paste(pil_img, (0, (width - height) // 2))
+            return result
+        else:
+            result = Image.new(pil_img.mode, (height, height), background_color)
+            result.paste(pil_img, ((height - width) // 2, 0))
+            return result
+
+    def get_region_proposals(self, results,image_h, image_w):
+        human_idx = 0
+        min_instances = 3
+        max_instances = 15
+        region_props = []
+        # for res in results:
+        # pdb.set_trace()
+        bx = results['ex_bbox']
+        sc = results['ex_scores']
+        lb = results['ex_labels']
+        hs = results['ex_hidden_states']
+        is_human = lb == human_idx
+        hum = torch.nonzero(is_human).squeeze(1)
+        obj = torch.nonzero(is_human == 0).squeeze(1)
+        n_human = is_human.sum(); n_object = len(lb) - n_human
+        # Keep the number of human and object instances in a specified interval
+        device = torch.device('cpu')
+        if n_human < min_instances:
+            keep_h = sc[hum].argsort(descending=True)[:min_instances]
+            keep_h = hum[keep_h]
+        elif n_human > max_instances:
+            keep_h = sc[hum].argsort(descending=True)[:max_instances]
+            keep_h = hum[keep_h]
+        else:
+            # keep_h = torch.nonzero(is_human[keep]).squeeze(1)
+            # keep_h = keep[keep_h]
+            keep_h = hum
+
+        if n_object < min_instances:
+            keep_o = sc[obj].argsort(descending=True)[:min_instances]
+            keep_o = obj[keep_o]
+        elif n_object > max_instances:
+            keep_o = sc[obj].argsort(descending=True)[:max_instances]
+            keep_o = obj[keep_o]
+        else:
+            # keep_o = torch.nonzero(is_human[keep] == 0).squeeze(1)
+            # keep_o = keep[keep_o]
+            keep_o = obj
+
+        keep = torch.cat([keep_h, keep_o])
+
+        boxes=bx[keep]
+        scores=sc[keep]
+        labels=lb[keep]
+        hidden_states=hs[keep]
+        is_human = labels == human_idx
+            
+        n_h = torch.sum(is_human); n = len(boxes)
+        # Permute human instances to the top
+        if not torch.all(labels[:n_h]==human_idx):
+            h_idx = torch.nonzero(is_human).squeeze(1)
+            o_idx = torch.nonzero(is_human == 0).squeeze(1)
+            perm = torch.cat([h_idx, o_idx])
+            boxes = boxes[perm]; scores = scores[perm]
+            labels = labels[perm]; unary_tokens = unary_tokens[perm]
+        # Skip image when there are no valid human-object pairs
+        if n_h == 0 or n <= 1:
+            print(n_h, n)
+            # boxes_h_collated.append(torch.zeros(0, device=device, dtype=torch.int64))
+            # boxes_o_collated.append(torch.zeros(0, device=device, dtype=torch.int64))
+            # object_class_collated.append(torch.zeros(0, device=device, dtype=torch.int64))
+            # prior_collated.append(torch.zeros(2, 0, self.num_classes, device=device))
+            # continue
+
+        # Get the pairwise indices
+        x, y = torch.meshgrid(
+            torch.arange(n, device=device),
+            torch.arange(n, device=device)
+        )
+        # pdb.set_trace()
+        # Valid human-object pairs
+        x_keep, y_keep = torch.nonzero(torch.logical_and(x != y, x < n_h)).unbind(1)
+        sub_boxes = boxes[x_keep]
+        obj_boxes = boxes[y_keep]
+        lt = torch.min(sub_boxes[..., :2], obj_boxes[..., :2]) # left point
+        rb = torch.max(sub_boxes[..., 2:], obj_boxes[..., 2:]) # right point
+        union_boxes = torch.cat([lt,rb],dim=-1)
+        sub_boxes[:,0].clamp_(0, image_w)
+        sub_boxes[:,1].clamp_(0, image_h)
+        sub_boxes[:,2].clamp_(0, image_w)
+        sub_boxes[:,3].clamp_(0, image_h)
+
+        obj_boxes[:,0].clamp_(0, image_w)
+        obj_boxes[:,1].clamp_(0, image_h)
+        obj_boxes[:,2].clamp_(0, image_w)
+        obj_boxes[:,3].clamp_(0, image_h)
+
+        union_boxes[:,0].clamp_(0, image_w)
+        union_boxes[:,1].clamp_(0, image_h)
+        union_boxes[:,2].clamp_(0, image_w)
+        union_boxes[:,3].clamp_(0, image_h)
+    
+        # region_props.append(dict(
+        #     boxes=bx[keep],
+        #     scores=sc[keep],
+        #     labels=lb[keep],
+        #     hidden_states=hs[keep],
+        #     mask = ms[keep]
+        # ))
+
+        # return sub_boxes.int(), obj_boxes.int(), union_boxes.int()
+        return sub_boxes, obj_boxes, union_boxes
+
+    def get_union_mask(self, bbox, image_size):
+        n = len(bbox)
+        masks = torch.zeros
+        pass
+
+class CacheTemplate(defaultdict):
+    """A template for VCOCO cached results """
+    def __init__(self, **kwargs):
+        super().__init__()
+        for k, v in kwargs.items():
+            self[k] = v
+    def __missing__(self, k):
+        seg = k.split('_')
+        # Assign zero score to missing actions
+        if seg[-1] == 'agent':
+            return 0.
+        # Assign zero score and a tiny box to missing <action,role> pairs
+        else:
+            return [0., 0., .1, .1, 0.]
+
+from torch.cuda import amp
+class CustomisedDLE(DistributedLearningEngine):
+    def __init__(self, net, dataloader, max_norm=0, num_classes=117, start_epoch = 0, **kwargs):
+        super().__init__(net, None, dataloader, **kwargs)
+        self.max_norm = max_norm
+        self.num_classes = num_classes
+        self._start_epoch = start_epoch
+        # self.scaler = amp.GradScaler(enabled=True)
+
+    def _on_each_iteration(self, epoch):
+        # with amp.autocast(enabled=True):
+        loss_dict = self._state.net(
+            *self._state.inputs, targets=self._state.targets)
+
+        if torch.isnan(torch.tensor(list(loss_dict.values()))).any():
+            raise ValueError(f"The HOI loss is NaN for rank {self._rank}")
+
+        # print("epoch", epoch, self._start_epoch, loss_dict)
+        # if epoch + self._start_epoch >=5:
+        # self._state.loss = sum(loss for loss in loss_dict.values() if loss_dict.keys() != "diffusion_loss")
+        # else:
+        self._state.loss = sum(loss for loss in loss_dict.values())
+        # print("final loss ", self._state.loss, epoch, self._start_epoch)
+        self._state.optimizer.zero_grad(set_to_none=True)
+        self._state.loss.backward()
+        if self.max_norm > 0:
+            torch.nn.utils.clip_grad_norm_(self._state.net.parameters(), self.max_norm)
+        self._state.optimizer.step()
+
+    
+
+    @torch.no_grad()
+    def test_hico(self, dataloader, args=None):
+        net = self._state.net
+        net.eval()
+        dataset = dataloader.dataset.dataset
+        interaction_to_verb = torch.as_tensor(dataset.interaction_to_verb)
+
+        associate = BoxPairAssociation(min_iou=0.5)
+        conversion = torch.from_numpy(np.asarray(
+            dataset.object_n_verb_to_interaction, dtype=float
+        ))
+        tgt_num_classes = 600
+        
+        num_gt = dataset.anno_interaction if args.dataset == "hicodet" else None
+        meter = DetectionAPMeter(
+            tgt_num_classes, nproc=1,
+            num_gt=num_gt,
+            algorithm='11P'
+        )
+        dict_hois = {}
+        count = 0
+
+       
+        dict_hoi_score = {}
+        tsne_feat_list = []
+        tsne_label_list = []
+        text_feat_list = []
+        text_label_list = []
+        name_list = {}
+        pred_list = {}
+        seen_conf = {}
+        unseen_conf = {}
+
+      
+        for batch in tqdm(dataloader):
+            inputs = pocket.ops.relocate_to_cuda(batch[0])
+            outputs = net(inputs,batch[1])
+
+            # if "train2015" in batch[-1][0]['filename']:
+            #     continue
+            # Skip images without detections
+            if outputs is None or len(outputs) == 0:
+                continue
+
+            for output, target in zip(outputs, batch[-1]):
+                count += 1
+                output = pocket.ops.relocate_to_cpu(output, ignore=True)
+                # Format detections
+                boxes = output['boxes']
+                boxes_h, boxes_o = boxes[output['pairing']].unbind(0)
+                objects = output['objects']
+                scores = output['scores']
+                verbs = output['labels']
+                if net.module.num_classes==117 or net.module.num_classes==407:
+                    interactions = conversion[objects, verbs]
+                else:
+                    interactions = verbs
+
+                # Recover target box scale
+                gt_bx_h = net.module.recover_boxes(target['boxes_h'], target['size'])
+                gt_bx_o = net.module.recover_boxes(target['boxes_o'], target['size'])
+                # Associate detected pairs with ground truth pairs
+                labels = torch.zeros_like(scores)
+                unique_hoi = interactions.unique()
+                
+                for hoi_idx in unique_hoi:
+                    gt_idx = torch.nonzero(target['hoi'] == hoi_idx).squeeze(1)
+                    det_idx = torch.nonzero(interactions == hoi_idx).squeeze(1)
+                    if len(gt_idx):
+                        labels[det_idx] = associate(
+                            (gt_bx_h[gt_idx].view(-1, 4),
+                            gt_bx_o[gt_idx].view(-1, 4)),
+                            (boxes_h[det_idx].view(-1, 4),
+                            boxes_o[det_idx].view(-1, 4)),
+                            scores[det_idx].view(-1)
+                        )
+                        # all_det_idxs.append(det_idx)
+                gt_ind = torch.nonzero(labels).squeeze(1)
+                verb_gt = verbs[gt_ind]
+                obj_gt = objects[gt_ind]
+                score_pred = scores[gt_ind]
+                hoi_gt = [MAP_AO_TO_HOI[verb_gt[i], obj_gt[i]] for i in range(len(verb_gt))]
+                for iidxx, temp_hoii in enumerate(hoi_gt):
+                    if temp_hoii in hico_unseen_index[args.zs_type]:
+                        if temp_hoii not in unseen_conf:
+                            unseen_conf[temp_hoii] = []
+                        unseen_conf[temp_hoii].append(score_pred[iidxx].item())
+                    else:
+                        if temp_hoii not in seen_conf:
+                            seen_conf[temp_hoii] = []
+                        seen_conf[temp_hoii].append(score_pred[iidxx].item())
+            
+                if args.vis_img == True:
+                    save_path = os.path.join(args.vis_img_path)
+                    if os.path.exists(save_path):
+                        pass
+                    else:
+                        os.makedirs(save_path)
+                    
+                    save_path = os.path.join(save_path, batch[1][0]['filename'])
+
+                    img_result = cv2.imread(os.path.join("../data/hico_20160224_det/images/test2015", batch[1][0]['filename'])).astype(np.float32)
+                    
+                    h, w, c = img_result.shape
+                    h_ratio = h/target['size'][0]
+                    w_ratio = w/target['size'][1]
+                    
+                    int_score, int_ind = scores.topk(7)
+                    idx = 0
+                    for temp_score, temp_ind in zip(int_score, int_ind):
+                        idx += 1
+                        # print("hois", hoi)
+                        if idx > 6:
+                            continue
+
+                        color = self.random_color()
+
+                        # human
+                        # h_id = hoi['subject_id']
+                        
+                        x1, y1, x2, y2 = boxes_h[temp_ind]
+                        x1 *= w_ratio
+                        x2 *= w_ratio
+                        y1 *= h_ratio
+                        y2 *= h_ratio
+                        # h_cls = pred_bboxes[h_id]['category_id']
+                        h_name = "person"+str(idx)
+                        cv2.rectangle(img_result, (int(x1), int(y1)), (int(x2), int(y2)), color, 2)
+                        cv2.putText(img_result, '%s' % (h_name), (int(x1), int(y2)), cv2.FONT_HERSHEY_COMPLEX, 0.8, color, 2)
+                        
+                        # object& action
+                        x1, y1, x2, y2 = boxes_o[temp_ind]
+                        x1 *= w_ratio
+                        x2 *= w_ratio
+                        y1 *= h_ratio
+                        y2 *= h_ratio
+                        # ao_cls = hoi['category_id']
+                        ao_name = HICO_INTERACTIONS[int(interactions[temp_ind])]['object']+str(idx)
+                        cv2.rectangle(img_result, (int(x1), int(y1)), (int(x2), int(y2)), color, 2)
+                        # cv2.putText(img_result, '%s:%.4f' % (o_name, o_cls), (x1, y2), cv2.FONT_HERSHEY_COMPLEX, 1, color, 2)
+                        cv2.putText(img_result, '%s' % (ao_name), (int(x1), int(y2)), cv2.FONT_HERSHEY_COMPLEX, 0.8, color, 2)
+                        # action
+                        # i_cls = hoi['category_id']
+                        i_name = HICO_INTERACTIONS[int(interactions[temp_ind])]['action'] + str(idx)
+                        # cv2.putText(img_result, '%s:%.4f' % (i_name, i_cls),
+                        #             (10, 50 * idx_box + 50), cv2.FONT_HERSHEY_COMPLEX, 1, color, 2)
+                        if temp_ind in gt_ind:
+                            i_name = i_name + " GT"
+                        if int(interactions[temp_ind]) in hico_unseen_index[args.zs_type]:
+                            i_name = i_name + " US"
+                        cv2.putText(img_result, '%s' % (i_name +": " +str(round(temp_score.item(), 3))),
+                                (10, int(50 * idx + 50)), cv2.FONT_HERSHEY_COMPLEX, 0.8, color, 2)                    
+
+                    cv2.imwrite( save_path, img_result)
+
+                meter.append(scores, interactions, labels)   # scores human*object*verb, interaction（600), labels
+                
+
+        return meter.eval()
+
+    def random_color(self):
+        rdn = random.randint(1, 1000)
+        b = int(rdn * 997) % 255
+        g = int(rdn * 4447) % 255
+        r = int(rdn * 6563) % 255
+        return b, g, r
+    
+    @torch.no_grad()
+    def cache_hico(self, dataloader, cache_dir='matlab'):
+        net = self._state.net
+        net.eval()
+
+        dataset = dataloader.dataset.dataset
+        conversion = torch.from_numpy(np.asarray(
+            dataset.object_n_verb_to_interaction, dtype=float
+        ))
+        object2int = dataset.object_to_interaction
+
+        # Include empty images when counting
+        nimages = len(dataset.annotations)
+        all_results = np.empty((600, nimages), dtype=object)
+
+        for i, batch in enumerate(tqdm(dataloader)):
+            inputs = pocket.ops.relocate_to_cuda(batch[0])
+            output = net(inputs)
+
+            # Skip images without detections
+            if output is None or len(output) == 0:
+                continue
+            # Batch size is fixed as 1 for inference
+            assert len(output) == 1, f"Batch size is not 1 but {len(output)}."
+            output = pocket.ops.relocate_to_cpu(output[0], ignore=True)
+            # NOTE Index i is the intra-index amongst images excluding those
+            # without ground truth box pairs
+            image_idx = dataset._idx[i]
+            # Format detections
+            boxes = output['boxes']
+            boxes_h, boxes_o = boxes[output['pairing']].unbind(0)
+            objects = output['objects']
+            scores = output['scores']
+            verbs = output['labels']
+            interactions = conversion[objects, verbs]
+            # Rescale the boxes to original image size
+            ow, oh = dataset.image_size(i)
+            h, w = output['size']
+            scale_fct = torch.as_tensor([
+                ow / w, oh / h, ow / w, oh / h
+            ]).unsqueeze(0)
+            boxes_h *= scale_fct
+            boxes_o *= scale_fct
+
+            # Convert box representation to pixel indices
+            boxes_h[:, 2:] -= 1
+            boxes_o[:, 2:] -= 1
+
+            # Group box pairs with the same predicted class
+            permutation = interactions.argsort()
+            boxes_h = boxes_h[permutation]
+            boxes_o = boxes_o[permutation]
+            interactions = interactions[permutation]
+            scores = scores[permutation]
+
+            # Store results
+            unique_class, counts = interactions.unique(return_counts=True)
+            n = 0
+            for cls_id, cls_num in zip(unique_class, counts):
+                all_results[cls_id.long(), image_idx] = torch.cat([
+                    boxes_h[n: n + cls_num],
+                    boxes_o[n: n + cls_num],
+                    scores[n: n + cls_num, None]
+                ], dim=1).numpy()
+                n += cls_num
+        
+        # Replace None with size (0,0) arrays
+        for i in range(600):
+            for j in range(nimages):
+                if all_results[i, j] is None:
+                    all_results[i, j] = np.zeros((0, 0))
+        if not os.path.exists(cache_dir):
+            os.makedirs(cache_dir)
+        # Cache results
+        for object_idx in range(80):
+            interaction_idx = object2int[object_idx]
+            sio.savemat(
+                os.path.join(cache_dir, f'detections_{(object_idx + 1):02d}.mat'),
+                dict(all_boxes=all_results[interaction_idx])
+            )
+
+    @torch.no_grad()
+    def cache_vcoco(self, dataloader, cache_dir='vcoco_cache', args = None):
+        net = self._state.net
+        net.eval()
+
+        dataset = dataloader.dataset.dataset
+        all_results = []
+        hoi_dict = {}
+        for i, batch in enumerate(tqdm(dataloader)):
+            inputs = pocket.ops.relocate_to_cuda(batch[0])
+            output = net(inputs, batch[1])
+
+            # Skip images without detections
+            if output is None or len(output) == 0:
+                continue
+            # Batch size is fixed as 1 for inference
+            assert len(output) == 1, f"Batch size is not 1 but {len(output)}."
+            output = pocket.ops.relocate_to_cpu(output[0], ignore=True)
+            # NOTE Index i is the intra-index amongst images excluding those
+            # without ground truth box pairs
+            image_id = dataset.image_id(i)
+            # Format detections
+            boxes = output['boxes']
+            boxes_h, boxes_o = boxes[output['pairing']].unbind(0)
+            scores = output['scores']
+            actions = output['labels']
+            # Rescale the boxes to original image size
+            ow, oh = dataset.image_size(i)
+            h, w = output['size']
+            scale_fct = torch.as_tensor([
+                ow / w, oh / h, ow / w, oh / h
+            ]).unsqueeze(0)
+            boxes_h *= scale_fct
+            boxes_o *= scale_fct
+
+
+            # pdb.set_trace()
+            # for tgti in batch[1]:
+            #     actions = tgti['actions']
+            #     objects = tgti['object']
+            #     for ai, oi in zip(actions, objects):
+            #         HOIs = MAP_AO_TO_HOI_COCO[(ai.item(), oi.item())] 
+            #         if HOIs not in hoi_dict.keys():
+            #             hoi_dict[HOIs] = 0
+            #         hoi_dict[HOIs] += 1
+
+            if args.vis_img == True:
+                save_path = os.path.join(args.vis_img_path)
+                if os.path.exists(save_path):
+                    pass
+                else:
+                    os.makedirs(save_path)
+                
+                save_path = os.path.join(save_path, batch[1][0]['filename'])
+
+                img_result = cv2.imread(os.path.join("../data/mscoco2014/val2014", batch[1][0]['filename'])).astype(np.float32)
+                
+                # h, w, c = img_result.shape
+                # h_ratio = h/batch[1][0]['size'][0]
+                # w_ratio = w/batch[1][0]['size'][1]
+
+            idx = -1
+            cnt = -1
+            for bh, bo, scr, acti in zip(boxes_h, boxes_o, scores, actions):
+                idx += 1
+                a_name = dataset.actions[acti].split()
+                result = CacheTemplate(image_id=image_id, person_box=bh.tolist())
+                result[a_name[0] + '_agent'] = scr.item()
+                result['_'.join(a_name)] = bo.tolist() + [scr.item()]
+                all_results.append(result)
+                # pdb.set_trace()
+
+            # if batch[1][0]['filename'] == 'COCO_val2014_000000001700.jpg':
+            #     pdb.set_trace()
+                if args.vis_img == True and scr >= scores.topk(4).values[-1] :  
+                    cnt += 1
+                    color = self.random_color()
+
+                    x1, y1, x2, y2 = bh
+                    # x1 *= w_ratio
+                    # x2 *= w_ratio
+                    # y1 *= h_ratio
+                    # y2 *= h_ratio
+                    # h_cls = pred_bboxes[h_id]['category_id']
+                    h_name = "person"
+                    cv2.rectangle(img_result, (int(x1), int(y1)), (int(x2), int(y2)), color, 2)
+                    cv2.putText(img_result, '%s' % (h_name), (int(x1), int(y2)), cv2.FONT_HERSHEY_COMPLEX, 0.8, color, 2)
+                    
+                    # object& action
+                    x1, y1, x2, y2 = bo
+                    # x1 *= w_ratio
+                    # x2 *= w_ratio
+                    # y1 *= h_ratio
+                    # y2 *= h_ratio
+                    # pdb.set_trace()
+                    o_name = obj_to_name[output['objects'][idx]]
+                    cv2.rectangle(img_result, (int(x1), int(y1)), (int(x2), int(y2)), color, 2)
+                    cv2.putText(img_result, '%s' % (o_name), (int(x1), int(y2)), cv2.FONT_HERSHEY_COMPLEX, 0.8, color, 2)
+                    # action
+
+                    cv2.putText(img_result, '%s' % (a_name[0] +": " +str(round(scr.item(), 3))),
+                            (10, int(50 * cnt + 50)), cv2.FONT_HERSHEY_COMPLEX, 0.8, color, 2)                    
+
+                    cv2.imwrite( save_path, img_result)
+            
+            # if args.vis_img == True:
+            #     gt_scale_fct = torch.as_tensor([
+            #     ow, oh , ow , oh ])
+            #     idxgt = -1
+            #     for gtbh, gtbo , gtact, gtobj in zip(batch[1][0]['boxes_h'], batch[1][0]['boxes_o'], batch[1][0]['actions'], batch[1][0]['object']):
+            #         idxgt += 1
+            #         color = self.random_color()
+            #         gtbh *= gt_scale_fct
+            #         x1 = gtbh[0]- gtbh[2]/2
+            #         x2 = gtbh[0]+ gtbh[2]/2
+            #         y1 = gtbh[1]- gtbh[3]/2
+            #         y2 = gtbh[1]+ gtbh[3]/2
+            #         # x1, y1, x2, y2 = gtbh*gt_scale_fct
+            #         # x1 *= w_ratio
+            #         # x2 *= w_ratio
+            #         # y1 *= h_ratio
+            #         # y2 *= h_ratio
+            #         # h_cls = pred_bboxes[h_id]['category_id']
+            #         h_name = "person"
+            #         cv2.rectangle(img_result, (int(x1), int(y1)), (int(x2), int(y2)), color, 2)
+            #         cv2.putText(img_result, '%s' % (h_name), (int(x1), int(y2)), cv2.FONT_HERSHEY_COMPLEX, 0.8, color, 2)
+                    
+            #         # object& action
+            #         gtbo *= gt_scale_fct
+            #         x1 = gtbo[0]- gtbo[2]/2
+            #         x2 = gtbo[0]+ gtbo[2]/2
+            #         y1 = gtbo[1]- gtbo[3]/2
+            #         y2 = gtbo[1]+ gtbo[3]/2
+            #         # x1 *= w_ratio
+            #         # x2 *= w_ratio
+            #         # y1 *= h_ratio
+            #         # y2 *= h_ratio
+            #         # pdb.set_trace()
+            #         o_name = obj_to_name[(gtobj.item())-1]
+            #         cv2.rectangle(img_result, (int(x1), int(y1)), (int(x2), int(y2)), color, 2)
+            #         cv2.putText(img_result, '%s' % (o_name), (int(x1), int(y2)), cv2.FONT_HERSHEY_COMPLEX, 0.8, color, 2)
+            #         # action
+            #         a_name_gt = dataset.actions[gtact].split()
+            #         cv2.putText(img_result, '%s' % (a_name_gt[0]),
+            #                 (10, int(50 * idxgt + 50)), cv2.FONT_HERSHEY_COMPLEX, 0.8, color, 2)                    
+
+            #         # pdb.set_trace()
+            #         cv2.imwrite( ( save_path.split(".")[0]+ "_gt.jpg"), img_result)
+            #         # if 'sit' in a_name_gt and 'dining' in o_name:
+            #         #     pdb.set_trace()
+            #         #     print(a_name_gt,  batch[1][0]['filename'])
+
+
+        # print("hoi_dict", hoi_dict)
+        # for i in range(236):
+        #     if i not in hoi_dict:
+        #         print("not HOI: ", i)
+
+        if not os.path.exists(cache_dir):
+            os.makedirs(cache_dir) 
+        print('saving cache.pkl to', cache_dir)
+        with open(os.path.join(cache_dir, 'cache.pkl'), 'wb') as f:
+            # Use protocol 2 for compatibility with Python2
+            pickle.dump(all_results, f, 2)
