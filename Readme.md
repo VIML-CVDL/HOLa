@@ -2,9 +2,8 @@
 
 ## Paper Links
 
-to be released
-<!-- [arXiv](https://arxiv.org/) 
-[Project Page](https://chelsielei.github.io/) -->
+<!-- [arXiv](https://arxiv.org/)  -->
+[Project Page](https://chelsielei.github.io/LordHOI_Proj/)
 
 
 ## Dataset 
