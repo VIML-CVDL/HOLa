@@ -1,4 +1,4 @@
-# [NeurIPS 2024] EZ-HOI: VLM Adaptation via Guided  Prompt Learning for Zero-Shot HOI Detection
+# [ICCV 2025] LoRD-HOI: Zero-Shot HOI Detection with Low-Rank Decomposed VLM Feature Adaptation
 
 ## Paper Links
 
