@@ -5,6 +5,8 @@
 <!-- [arXiv](https://arxiv.org/)  -->
 [Project Page](https://chelsielei.github.io/LordHOI_Proj/)
 
+The paper is under camera ready and will be released soon. 
+
 
 ## Dataset 
 Follow the process of [UPT](https://github.com/fredzzhang/upt).
