@@ -1,11 +1,12 @@
-# [ICCV 2025] LoRD-HOI: Zero-Shot HOI Detection with Low-Rank Decomposed VLM Feature Adaptation
+# [ICCV 2025] HOLa: Zero-Shot HOI Detection with Low-Rank Decomposed VLM Feature Adaptation
 
 ## Paper Links
 
-<!-- [arXiv](https://arxiv.org/)  -->
-[Project Page](https://chelsielei.github.io/LordHOI_Proj/)
+[arXiv](https://arxiv.org/abs/2507.15542) 
 
-The paper is under camera ready and will be released soon. 
+[Project Page](https://chelsielei.github.io/HOLa_Proj/)
+
+
 
 
 ## Dataset 
@@ -13,7 +14,7 @@ Follow the process of [UPT](https://github.com/fredzzhang/upt).
 
 The downloaded files should be placed as follows. Otherwise, please replace the default path to your custom locations.
 ```
-|- Lord-HOI
+|- HOLa
 |   |- hicodet
 |   |   |- hico_20160224_det
 |   |       |- annotations
@@ -33,7 +34,7 @@ The downloaded files should be placed as follows. Otherwise, please replace the 
 **Reminder**: 
 If you have already installed the clip package in your Python environment (e.g., via pip install clip), please ensure that you use the local CLIP directory provided in our EZ-HOI repository instead. To do this, set the  `PYTHONPATH` to include the local CLIP path so that it takes precedence over the installed package.
 ```
-export PYTHONPATH=$PYTHONPATH:"your_path/Lord-HOI/CLIP"
+export PYTHONPATH=$PYTHONPATH:"your_path/HOLa/CLIP"
 ```
 So that you can use the local clip **without uninstall the clip of your python env**.
 
@@ -75,7 +76,13 @@ bash scripts/vcoco.sh
 | HICO-DET |default| ResNet-50+ViT-B  | 35.41|34.35|35.73|
 | HICO-DET |default| ResNet-50+ViT-L  | 39.05|38.66|39.17|
 
-You can download our pretrained model checkpoints using the following link:  
+
+You can download our pretrained model checkpoints using the following link from Google Drive:  
+```
+https://drive.google.com/drive/folders/1kH-yOi-YqdB35rSgKoRkmg_pGbyFEkUX?usp=sharing
+```
+
+You can also download our pretrained model checkpoints using the following Kuake link:  
 ```
 Link: https://pan.quark.cn/s/c3f30b122ed2 
 Extraction code: yawa
@@ -85,8 +92,8 @@ Extraction code: yawa
 If you find our paper and/or code helpful, please consider citing :
 ```
 @inproceedings{
-lei2025lordhoi,
-title={LoRD-HOI: Zero-Shot HOI Detection with Low-Rank Decomposed VLM Feature Adaptation},
+lei2025hola,
+title={HOLa: Zero-Shot HOI Detection with Low-Rank Decomposed VLM Feature Adaptation},
 author={Lei, Qinqian and Wang, Bo and Robby T., Tan},
 booktitle={In Proceedings of the IEEE/CVF international conference on computer vision},
 year={2025}
